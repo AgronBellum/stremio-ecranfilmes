@@ -1,0 +1,93 @@
+{
+  "name": "webstreamr",
+  "description": "Provides HTTP URLs from streaming websites.",
+  "version": "0.69.1",
+  "type": "commonjs",
+  "scripts": {
+    "analyse": "tsc --noEmit --project ./tsconfig.dev.json",
+    "build": "rm -rf ./dist && tsc",
+    "dev": "nodemon src/index.ts",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "start": "node dist/index.js",
+    "test": "jest",
+    "test:update-fixtures": "TEST_UPDATE_FIXTURES=1 npm run test",
+    "ci": "npm run lint && npm run analyse && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webstreamr/webstreamr.git"
+  },
+  "keywords": [
+    "stremio",
+    "stream"
+  ],
+  "author": "WebStreamr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webstreamr/webstreamr/issues"
+  },
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "npm",
+      "onFail": "error"
+    }
+  },
+  "dependencies": {
+    "@keyv/sqlite": "^4.0.5",
+    "async-mutex": "^0.5.0",
+    "axios": "^1.13.2",
+    "axios-cache-interceptor": "^1.8.3",
+    "axios-mock-adapter": "^2.1.0",
+    "axios-retry": "^4.5.0",
+    "bytes": "^3.1.2",
+    "cacheable": "^2.0.0",
+    "cheerio": "^1.0.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "fast-levenshtein": "^3.0.0",
+    "glob": "^13.0.0",
+    "http-proxy-agent": "^7.0.2",
+    "https-proxy-agent": "^7.0.6",
+    "memoizee": "^0.4.17",
+    "minimatch": "^10.0.3",
+    "randomstring": "^1.3.1",
+    "rot13-cipher": "^1.0.0",
+    "slugify": "^1.6.6",
+    "socks-proxy-agent": "^8.0.5",
+    "sqlite3": "^5.1.7",
+    "tough-cookie": "^6.0.0",
+    "unpacker": "^1.0.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.26.0",
+    "@stylistic/eslint-plugin": "^5.0.0",
+    "@tsconfig/node24": "^24.0.0",
+    "@types/bytes": "^3.1.5",
+    "@types/express": "^5.0.1",
+    "@types/fast-levenshtein": "^0.0.4",
+    "@types/jest": "^30.0.0",
+    "@types/memoizee": "^0.4.12",
+    "@types/node": "^24.0.0",
+    "@types/randomstring": "^1.3.0",
+    "@types/stremio-addon-sdk": "^1.6.11",
+    "babel-jest": "^30.0.0",
+    "eslint": "^9.26.0",
+    "eslint-plugin-import": "^2.32.0",
+    "jest": "^30.0.0",
+    "nodemon": "^3.1.10",
+    "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.31.1"
+  },
+  "private": true
+}

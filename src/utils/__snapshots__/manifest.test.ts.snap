@@ -1,0 +1,772 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`buildManifest default manifest 1`] = `
+{
+  "behaviorHints": {
+    "configurable": true,
+    "configurationRequired": false,
+    "p2p": false,
+  },
+  "catalogs": [],
+  "config": [
+    {
+      "key": "multi",
+      "title": "Multi 🌐 (4KHDHub, HDHub4u, RgShows, VidSrc, VixSrc)",
+      "type": "checkbox",
+    },
+    {
+      "key": "al",
+      "title": "Albanian 🇦🇱 (Kokoshka)",
+      "type": "checkbox",
+    },
+    {
+      "key": "de",
+      "title": "German 🇩🇪 (Einschalten, KinoGer, MegaKino, MeineCloud, StreamKiste)",
+      "type": "checkbox",
+    },
+    {
+      "key": "es",
+      "title": "Castilian Spanish 🇪🇸 (CineHDPlus, Cuevana, HomeCine, VerHdLink)",
+      "type": "checkbox",
+    },
+    {
+      "key": "fr",
+      "title": "French 🇫🇷 (Frembed, FrenchCloud, Movix)",
+      "type": "checkbox",
+    },
+    {
+      "key": "gu",
+      "title": "Gujarati 🇮🇳 (HDHub4u)",
+      "type": "checkbox",
+    },
+    {
+      "key": "hi",
+      "title": "Hindi 🇮🇳 (4KHDHub, HDHub4u)",
+      "type": "checkbox",
+    },
+    {
+      "key": "it",
+      "title": "Italian 🇮🇹 (Eurostreaming, MostraGuarda, VixSrc)",
+      "type": "checkbox",
+    },
+    {
+      "key": "ml",
+      "title": "Malayalam 🇮🇳 (HDHub4u)",
+      "type": "checkbox",
+    },
+    {
+      "key": "mx",
+      "title": "Latin American Spanish 🇲🇽 (CineHDPlus, Cuevana, HomeCine, VerHdLink)",
+      "type": "checkbox",
+    },
+    {
+      "key": "pa",
+      "title": "Punjabi 🇮🇳 (HDHub4u)",
+      "type": "checkbox",
+    },
+    {
+      "key": "ta",
+      "title": "Tamil 🇮🇳 (4KHDHub, HDHub4u)",
+      "type": "checkbox",
+    },
+    {
+      "key": "te",
+      "title": "Telugu 🇮🇳 (4KHDHub, HDHub4u)",
+      "type": "checkbox",
+    },
+    {
+      "key": "showErrors",
+      "title": "Show errors",
+      "type": "checkbox",
+    },
+    {
+      "key": "includeExternalUrls",
+      "title": "Include external URLs in results",
+      "type": "checkbox",
+    },
+    {
+      "default": "",
+      "key": "mediaFlowProxyUrl",
+      "title": "MediaFlow Proxy URL",
+      "type": "text",
+    },
+    {
+      "default": "",
+      "key": "mediaFlowProxyPassword",
+      "title": "MediaFlow Proxy Password",
+      "type": "password",
+    },
+    {
+      "key": "excludeResolution_2160p",
+      "title": "Exclude resolution 2160p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_1440p",
+      "title": "Exclude resolution 1440p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_1080p",
+      "title": "Exclude resolution 1080p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_720p",
+      "title": "Exclude resolution 720p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_576p",
+      "title": "Exclude resolution 576p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_480p",
+      "title": "Exclude resolution 480p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_360p",
+      "title": "Exclude resolution 360p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_240p",
+      "title": "Exclude resolution 240p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_144p",
+      "title": "Exclude resolution 144p",
+      "type": "checkbox",
+    },
+    {
+      "key": "excludeResolution_Unknown",
+      "title": "Exclude resolution Unknown",
+      "type": "checkbox",
+    },
+  ],
+  "description": "Provides HTTP URLs from streaming websites. Configure add-on for additional languages. Add MediaFlow proxy for more URLs.
+
+Supported languages: Albanian, German, Castilian Spanish, French, Gujarati, Hindi, Italian, Malayalam, Latin American Spanish, Punjabi, Tamil, Telugu
+
+Supported sources: 4KHDHub, CineHDPlus, Cuevana, Einschalten, Eurostreaming, Frembed, FrenchCloud, HDHub4u, HomeCine, KinoGer, Kokoshka, MegaKino, MeineCloud, MostraGuarda, Movix, RgShows, StreamKiste, VerHdLink, VidSrc, VixSrc
+
+Supported extractors: ",
+  "id": "webstreamr",
+  "idPrefixes": [
+    "tmdb:",
+    "tt",
+  ],
+  "logo": "https://emojiapi.dev/api/v1/spider_web/256.png",
+  "name": "WebStreamr",
+  "resources": [
+    "stream",
+  ],
+  "stremioAddonsConfig": {
+    "issuer": "https://stremio-addons.net",
+    "signature": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..D3-Wl15vxnYltwx8G52rRg.16-0VzsSgTvnv0wampIR8YPZsFhH8-7IgpuqxcUfC2p7kIJtuk8xQzrzqQOLXANEpaH_w7a4JOEpNo8wv28Zo_nMGCLOXgWbyGM3sQ-tfq6DCK3JU0ol6YMC1UDX2z_c.IOLlZyTYx_swutjYSTES0Q",
+  },
+  "types": [
+    "movie",
+    "series",
+  ],
+  "version": Any<String>,
+}
+`;
+
+exports[`buildManifest disable extractors 1`] = `
+[
+  {
+    "key": "showErrors",
+    "title": "Show errors",
+    "type": "checkbox",
+  },
+  {
+    "key": "includeExternalUrls",
+    "title": "Include external URLs in results",
+    "type": "checkbox",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyUrl",
+    "title": "MediaFlow Proxy URL",
+    "type": "text",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyPassword",
+    "title": "MediaFlow Proxy Password",
+    "type": "password",
+  },
+  {
+    "key": "excludeResolution_2160p",
+    "title": "Exclude resolution 2160p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1440p",
+    "title": "Exclude resolution 1440p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1080p",
+    "title": "Exclude resolution 1080p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_720p",
+    "title": "Exclude resolution 720p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_576p",
+    "title": "Exclude resolution 576p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_480p",
+    "title": "Exclude resolution 480p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_360p",
+    "title": "Exclude resolution 360p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_240p",
+    "title": "Exclude resolution 240p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_144p",
+    "title": "Exclude resolution 144p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_Unknown",
+    "title": "Exclude resolution Unknown",
+    "type": "checkbox",
+  },
+  {
+    "default": "checked",
+    "key": "disableExtractor_doodstream",
+    "title": "Disable extractor DoodStream",
+    "type": "checkbox",
+  },
+  {
+    "key": "disableExtractor_supervideo",
+    "title": "Disable extractor SuperVideo",
+    "type": "checkbox",
+  },
+]
+`;
+
+exports[`buildManifest has checked excludeResolution_2160p 1`] = `
+[
+  {
+    "key": "showErrors",
+    "title": "Show errors",
+    "type": "checkbox",
+  },
+  {
+    "key": "includeExternalUrls",
+    "title": "Include external URLs in results",
+    "type": "checkbox",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyUrl",
+    "title": "MediaFlow Proxy URL",
+    "type": "text",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyPassword",
+    "title": "MediaFlow Proxy Password",
+    "type": "password",
+  },
+  {
+    "default": "checked",
+    "key": "excludeResolution_2160p",
+    "title": "Exclude resolution 2160p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1440p",
+    "title": "Exclude resolution 1440p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1080p",
+    "title": "Exclude resolution 1080p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_720p",
+    "title": "Exclude resolution 720p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_576p",
+    "title": "Exclude resolution 576p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_480p",
+    "title": "Exclude resolution 480p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_360p",
+    "title": "Exclude resolution 360p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_240p",
+    "title": "Exclude resolution 240p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_144p",
+    "title": "Exclude resolution 144p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_Unknown",
+    "title": "Exclude resolution Unknown",
+    "type": "checkbox",
+  },
+]
+`;
+
+exports[`buildManifest has checked includeExternalUrls 1`] = `
+[
+  {
+    "key": "showErrors",
+    "title": "Show errors",
+    "type": "checkbox",
+  },
+  {
+    "default": "checked",
+    "key": "includeExternalUrls",
+    "title": "Include external URLs in results",
+    "type": "checkbox",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyUrl",
+    "title": "MediaFlow Proxy URL",
+    "type": "text",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyPassword",
+    "title": "MediaFlow Proxy Password",
+    "type": "password",
+  },
+  {
+    "key": "excludeResolution_2160p",
+    "title": "Exclude resolution 2160p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1440p",
+    "title": "Exclude resolution 1440p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1080p",
+    "title": "Exclude resolution 1080p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_720p",
+    "title": "Exclude resolution 720p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_576p",
+    "title": "Exclude resolution 576p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_480p",
+    "title": "Exclude resolution 480p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_360p",
+    "title": "Exclude resolution 360p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_240p",
+    "title": "Exclude resolution 240p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_144p",
+    "title": "Exclude resolution 144p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_Unknown",
+    "title": "Exclude resolution Unknown",
+    "type": "checkbox",
+  },
+]
+`;
+
+exports[`buildManifest has checked showErrors 1`] = `
+[
+  {
+    "default": "checked",
+    "key": "showErrors",
+    "title": "Show errors",
+    "type": "checkbox",
+  },
+  {
+    "key": "includeExternalUrls",
+    "title": "Include external URLs in results",
+    "type": "checkbox",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyUrl",
+    "title": "MediaFlow Proxy URL",
+    "type": "text",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyPassword",
+    "title": "MediaFlow Proxy Password",
+    "type": "password",
+  },
+  {
+    "key": "excludeResolution_2160p",
+    "title": "Exclude resolution 2160p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1440p",
+    "title": "Exclude resolution 1440p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1080p",
+    "title": "Exclude resolution 1080p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_720p",
+    "title": "Exclude resolution 720p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_576p",
+    "title": "Exclude resolution 576p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_480p",
+    "title": "Exclude resolution 480p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_360p",
+    "title": "Exclude resolution 360p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_240p",
+    "title": "Exclude resolution 240p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_144p",
+    "title": "Exclude resolution 144p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_Unknown",
+    "title": "Exclude resolution Unknown",
+    "type": "checkbox",
+  },
+]
+`;
+
+exports[`buildManifest has checked source with appropriate config 1`] = `
+[
+  {
+    "default": "checked",
+    "key": "de",
+    "title": "German 🇩🇪 (MeineCloud, StreamKiste)",
+    "type": "checkbox",
+  },
+  {
+    "key": "es",
+    "title": "Castilian Spanish 🇪🇸 (VerHdLink)",
+    "type": "checkbox",
+  },
+  {
+    "key": "mx",
+    "title": "Latin American Spanish 🇲🇽 (VerHdLink)",
+    "type": "checkbox",
+  },
+  {
+    "key": "showErrors",
+    "title": "Show errors",
+    "type": "checkbox",
+  },
+  {
+    "default": "checked",
+    "key": "includeExternalUrls",
+    "title": "Include external URLs in results",
+    "type": "checkbox",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyUrl",
+    "title": "MediaFlow Proxy URL",
+    "type": "text",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyPassword",
+    "title": "MediaFlow Proxy Password",
+    "type": "password",
+  },
+  {
+    "key": "excludeResolution_2160p",
+    "title": "Exclude resolution 2160p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1440p",
+    "title": "Exclude resolution 1440p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1080p",
+    "title": "Exclude resolution 1080p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_720p",
+    "title": "Exclude resolution 720p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_576p",
+    "title": "Exclude resolution 576p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_480p",
+    "title": "Exclude resolution 480p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_360p",
+    "title": "Exclude resolution 360p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_240p",
+    "title": "Exclude resolution 240p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_144p",
+    "title": "Exclude resolution 144p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_Unknown",
+    "title": "Exclude resolution Unknown",
+    "type": "checkbox",
+  },
+]
+`;
+
+exports[`buildManifest has unchecked source without a config 1`] = `
+[
+  {
+    "key": "de",
+    "title": "German 🇩🇪 (MeineCloud, StreamKiste)",
+    "type": "checkbox",
+  },
+  {
+    "key": "es",
+    "title": "Castilian Spanish 🇪🇸 (VerHdLink)",
+    "type": "checkbox",
+  },
+  {
+    "key": "multi",
+    "title": "Multi 🌐 (VixSrc)",
+    "type": "checkbox",
+  },
+  {
+    "key": "it",
+    "title": "Italian 🇮🇹 (VixSrc)",
+    "type": "checkbox",
+  },
+  {
+    "key": "mx",
+    "title": "Latin American Spanish 🇲🇽 (VerHdLink)",
+    "type": "checkbox",
+  },
+  {
+    "key": "showErrors",
+    "title": "Show errors",
+    "type": "checkbox",
+  },
+  {
+    "key": "includeExternalUrls",
+    "title": "Include external URLs in results",
+    "type": "checkbox",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyUrl",
+    "title": "MediaFlow Proxy URL",
+    "type": "text",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyPassword",
+    "title": "MediaFlow Proxy Password",
+    "type": "password",
+  },
+  {
+    "key": "excludeResolution_2160p",
+    "title": "Exclude resolution 2160p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1440p",
+    "title": "Exclude resolution 1440p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1080p",
+    "title": "Exclude resolution 1080p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_720p",
+    "title": "Exclude resolution 720p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_576p",
+    "title": "Exclude resolution 576p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_480p",
+    "title": "Exclude resolution 480p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_360p",
+    "title": "Exclude resolution 360p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_240p",
+    "title": "Exclude resolution 240p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_144p",
+    "title": "Exclude resolution 144p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_Unknown",
+    "title": "Exclude resolution Unknown",
+    "type": "checkbox",
+  },
+]
+`;
+
+exports[`buildManifest showErrors and includeExternalUrls are unchecked by default 1`] = `
+[
+  {
+    "key": "showErrors",
+    "title": "Show errors",
+    "type": "checkbox",
+  },
+  {
+    "key": "includeExternalUrls",
+    "title": "Include external URLs in results",
+    "type": "checkbox",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyUrl",
+    "title": "MediaFlow Proxy URL",
+    "type": "text",
+  },
+  {
+    "default": "",
+    "key": "mediaFlowProxyPassword",
+    "title": "MediaFlow Proxy Password",
+    "type": "password",
+  },
+  {
+    "key": "excludeResolution_2160p",
+    "title": "Exclude resolution 2160p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1440p",
+    "title": "Exclude resolution 1440p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_1080p",
+    "title": "Exclude resolution 1080p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_720p",
+    "title": "Exclude resolution 720p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_576p",
+    "title": "Exclude resolution 576p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_480p",
+    "title": "Exclude resolution 480p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_360p",
+    "title": "Exclude resolution 360p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_240p",
+    "title": "Exclude resolution 240p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_144p",
+    "title": "Exclude resolution 144p",
+    "type": "checkbox",
+  },
+  {
+    "key": "excludeResolution_Unknown",
+    "title": "Exclude resolution Unknown",
+    "type": "checkbox",
+  },
+]
+`;

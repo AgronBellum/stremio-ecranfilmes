@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`StreamEmbed video is not ready 1`] = `[]`;
+
+exports[`StreamEmbed watch.gxplayer.xyz 1`] = `
+[
+  {
+    "format": "hls",
+    "label": "StreamEmbed",
+    "meta": {
+      "extractorId": "streamembed",
+      "height": 720,
+      "title": "Baymax - Riesiges Robowabohu.mp4",
+    },
+    "ttl": 259200000,
+    "url": "https://watch.gxplayer.xyz/m3u8/3/30b4a92517ace5825f5944c8a794ad3e/master.txt?s=1&id=11782&cache=1",
+  },
+]
+`;

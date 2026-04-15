@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`VixSrc Black Mirror 1`] = `
+[
+  {
+    "format": "hls",
+    "label": "VixSrc",
+    "meta": {
+      "countryCodes": [
+        "multi",
+        "en",
+        "it",
+      ],
+      "extractorId": "vixsrc",
+      "height": 1080,
+    },
+    "ttl": 21600000,
+    "url": "https://vixsrc.to/playlist/307316.m3u8?token=5e3c2b315b1eee966c5261902e02d3b4&expires=1764445261&h=1",
+  },
+]
+`;
+
+exports[`VixSrc Black Mirror is excluded if no matching language was found 1`] = `[]`;
+
+exports[`VixSrc Full Metal Jacket 1`] = `
+[
+  {
+    "format": "hls",
+    "label": "VixSrc",
+    "meta": {
+      "countryCodes": [
+        "multi",
+        "en",
+        "it",
+      ],
+      "extractorId": "vixsrc",
+      "height": 1080,
+    },
+    "ttl": 21600000,
+    "url": "https://vixsrc.to/playlist/219736.m3u8?token=436a7a6bc6256b32eece595e2d7c5ed6&expires=1764445261&h=1",
+  },
+]
+`;
+
+exports[`VixSrc Rental Family 1`] = `
+[
+  {
+    "format": "hls",
+    "label": "VixSrc",
+    "meta": {
+      "countryCodes": [
+        "multi",
+      ],
+      "extractorId": "vixsrc",
+      "height": 1080,
+    },
+    "ttl": 21600000,
+    "url": "https://vixsrc.to/playlist/612252.m3u8?token=d4118614964ebe7f00430371d305378d&expires=1773654453&h=1",
+  },
+]
+`;
