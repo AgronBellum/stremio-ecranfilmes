@@ -5,7 +5,7 @@
     ":maintainLockFilesWeekly",
     ":rebaseStalePrs"
   ],
-  "assignees": ["webstreamr"],
+  "assignees": ["ecran"],
   "configMigration": true,
   "osvVulnerabilityAlerts": true,
   "postUpdateOptions": [
