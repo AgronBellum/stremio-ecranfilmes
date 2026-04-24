@@ -1,5 +1,5 @@
 {
-  "name": "webstreamr",
+  "name": "ecran",
   "description": "Provides HTTP URLs from streaming websites.",
   "version": "0.69.1",
   "type": "commonjs",
