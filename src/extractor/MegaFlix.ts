@@ -53,7 +53,6 @@ export class MegaFlix extends Extractor {
       {
         url: playlistUrl,
         format: Format.hls,
-        ttl: this.ttl,
         meta: {
           ...meta,
           countryCodes,
@@ -192,7 +191,7 @@ export class MegaFlix extends Extractor {
 
   private async extractViaMoonPhp(ctx: Context, packedJs: string, referer: string, headers: Record<string, string>): Promise<string | null> {
     try {
-      const b64Data = Buffer.from(packedJs, 'utf-8').toString('base64');
+      const b64Data = Buffer.from(packedJs || '', 'utf-8').toString('base64');
       const origin = new URL(referer).origin;
       const res = await this.fetcher.text(ctx, new URL('https://app.megafrixapi.com/moon.php'), {
         headers: {
@@ -202,8 +201,8 @@ export class MegaFlix extends Extractor {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'X-Requested-With': 'XMLHttpRequest',
         },
-        body: `data=${encodeURIComponent(b64Data)}`,
-      });
+        data: `data=${encodeURIComponent(b64Data)}`,
+      } as any);
 
       const fileMatch = typeof res === 'string' ? res.match(/file\s*:\s*["'](https?:\/\/[^"']+\.(?:m3u8|txt|mp4)[^"']*)["']/i) : null;
       return fileMatch?.[1] || null;
