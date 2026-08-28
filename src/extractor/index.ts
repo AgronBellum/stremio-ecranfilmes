@@ -11,6 +11,7 @@ import { HubCloud } from './HubCloud';
 import { HubDrive } from './HubDrive';
 import { KinoGer } from './KinoGer';
 import { LuluStream } from './LuluStream';
+import { MegaFlix } from './MegaFlix'; // <--- 1. Importando o MegaFlix aqui
 import { Mixdrop } from './Mixdrop';
 import { RgShows } from './RgShows';
 import { SaveFiles } from './SaveFiles';
@@ -43,6 +44,7 @@ export const createExtractors = (fetcher: Fetcher): Extractor[] => {
     new HubDrive(fetcher, hubCloud),
     new KinoGer(fetcher),
     new LuluStream(fetcher),
+    new MegaFlix(fetcher), // <--- 2. Adicionando a instância do MegaFlix na lista
     new Mixdrop(fetcher),
     new RgShows(fetcher),
     new SaveFiles(fetcher),
