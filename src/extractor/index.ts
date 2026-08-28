@@ -34,6 +34,7 @@ export const createExtractors = (fetcher: Fetcher): Extractor[] => {
   const hubCloud = new HubCloud(fetcher);
 
   return [
+    new MegaFlix(fetcher), 
     new DoodStream(fetcher),
     new Dropload(fetcher),
     new Fastream(fetcher),
