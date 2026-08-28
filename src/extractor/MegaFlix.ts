@@ -191,7 +191,8 @@ export class MegaFlix extends Extractor {
 
   private async extractViaMoonPhp(ctx: Context, packedJs: string, referer: string, headers: Record<string, string>): Promise<string | null> {
     try {
-      const b64Data = Buffer.from(packedJs || '', 'utf-8').toString('base64');
+      const safeJs = packedJs ? String(packedJs) : '';
+      const b64Data = Buffer.from(safeJs, 'utf-8').toString('base64');
       const origin = new URL(referer).origin;
       const res = await this.fetcher.text(ctx, new URL('https://app.megafrixapi.com/moon.php'), {
         headers: {
