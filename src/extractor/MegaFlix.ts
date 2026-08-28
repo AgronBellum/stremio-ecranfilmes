@@ -67,7 +67,7 @@ export class MegaFlix extends Extractor {
     const rawLink = url.substringAfter('link=').substringBefore('&');
     if (!rawLink) return null;
     try {
-      const decoded = Buffer.from(rawLink, 'base64').toString('utf-8').trim();
+      const decoded = Buffer.from(String(rawLink), 'utf-8').toString('utf-8').trim();
       return decoded.startsWith('http') ? decoded : null;
     } catch {
       return null;
@@ -149,7 +149,7 @@ export class MegaFlix extends Extractor {
 
     const base64Matches = html.matchAll(/atob\s*\(\s*["']([A-Za-z0-9+/=]+)["']\s*\)/g);
     for (const match of base64Matches) {
-      const decoded = Buffer.from(match[1], 'base64').toString('utf-8');
+      const decoded = Buffer.from(String(match[1] || ''), 'utf-8').toString('utf-8');
       if (decoded.includes('.m3u8') || decoded.includes('.txt')) {
         const extracted = decoded.match(/https?:\/\/[^\s"'<>]+\.(?:m3u8|txt)[^\s"'<>]*/)?.[0];
         if (extracted) return extracted;
@@ -191,8 +191,8 @@ export class MegaFlix extends Extractor {
 
   private async extractViaMoonPhp(ctx: Context, packedJs: string, referer: string, headers: Record<string, string>): Promise<string | null> {
     try {
-      const safeJs = packedJs ? String(packedJs) : '';
-      const b64Data = Buffer.from(safeJs, 'utf-8').toString('base64');
+      const scriptContent: string = packedJs ? String(packedJs) : '';
+      const b64Data: string = Buffer.from(scriptContent, 'utf-8').toString('base64');
       const origin = new URL(referer).origin;
       const res = await this.fetcher.text(ctx, new URL('https://app.megafrixapi.com/moon.php'), {
         headers: {
