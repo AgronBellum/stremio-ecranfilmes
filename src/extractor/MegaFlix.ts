@@ -1,134 +1,275 @@
-import { Context, Meta } from '../types';
-import { Fetcher } from '../utils';
-import { Source } from './Source';
+import { NotFoundError } from '../error';
+import { Context, CountryCode, Format, InternalUrlResult, Meta } from '../types';
+import { guessHeightFromPlaylist, hasMultiEnabled } from '../utils';
+import { Extractor } from './Extractor';
+import * as cheerio from 'cheerio';
+import { URL } from 'url';
 
-export class MegaFlixSource extends Source {
+export class MegaFlix extends Extractor {
   public readonly id = 'megaflix';
-  public readonly label = 'MegaFlix (Dublados)';
-  public readonly baseUrl = 'https://megafrixapi.com';
+  public readonly label = 'MegaFlix';
+  public override readonly ttl: number = 21600000; // 6h
 
-  constructor(protected readonly fetcher: Fetcher) {
-    super();
+  private readonly mainUrl = 'https://megafrixapi.com';
+
+  public supports(_ctx: Context, url: URL): boolean {
+    const allowed = [
+      'megaflix', 'megafrixapi', 'faz-o-eli', 'luluvdo', 'playerwish', 'streamwish',
+      'filemoon', 'filemolson', 'streamtape', 'doodstream', 'mixdrop', 'voe', 'embedplay',
+      'vod07e001', 'vod07', 'vod', 'fun', 'hidehide', 'hide', 'listeamed', 'voltz', 'cnvs',
+      'vidara', 'upbolt', 'futureengineering', 'softwaredownloadhub', 'acek-cdn', 'tnmr.org',
+      'lulucdn', 'lulustream', 'shop', 'site'
+    ];
+    return allowed.some(domain => url.host.includes(domain));
   }
 
-  public async getStreams(ctx: Context, meta: Meta): Promise<string[]> {
-    try {
-      // 1. Busca metadados limpos usando a API oficial do Cinemeta v3 (igual ao Stremio)
-      const title = await this.getMetaDetails(ctx, meta);
-      if (!title) return [];
+  protected async extractInternal(ctx: Context, url: URL, meta: Meta): Promise<InternalUrlResult[]> {
+    const headers = {
+      'Referer': `${this.mainUrl}/`,
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    };
 
-      // 2. Pesquisa o item no MegaFlix
-      const itemId = await this.searchMegaFlixItem(ctx, title, meta.year ? String(meta.year) : '', meta.isSeries);
-      if (!itemId) return [];
+    let targetUrl = url.toString();
+    const decodedPlayer = this.tryDecodePlayerLink(targetUrl);
+    if (decodedPlayer) {
+      targetUrl = decodedPlayer;
+    }
 
-      const embedUrls: string[] = [];
+    const resolvedUrl = await this.resolveMegaFlixWrapper(ctx, targetUrl, headers);
+    const finalStreamUrl = await this.resolveStreamUrl(ctx, resolvedUrl, headers);
 
-      // 3. Extrai os links dos episódios (série) ou do filme
-      if (meta.isSeries && meta.season && meta.episode) {
-        const epUrl = `${this.baseUrl}/desktop/1.2.2/?page=getEpisodes&season=${meta.season}&idItem=${itemId}`;
-        const html = await this.fetcher.text(ctx, new URL(epUrl), {
-          method: 'POST',
-          body: 'userEpisodes=[]',
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-            'Referer': 'https://megaflix.name/',
-            'Origin': 'https://megaflix.name',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-          }
-        }).catch(() => '');
+    if (!finalStreamUrl) {
+      throw new NotFoundError();
+    }
 
-        const episodeBlockRegex = /openEpisode\s*\(\s*\{([\s\S]*?)\}\s*\)/g;
-        let match;
-        while ((match = episodeBlockRegex.exec(html)) !== null) {
-          const block = match[1];
-          const epNumMatch = block.match(/episode_num\s*:\s*["']?(\d+)["']?/);
-          if (epNumMatch && parseInt(epNumMatch[1], 10) === Number(meta.episode)) {
-            const brMatch = block.match(/br\s*:\s*["']([^"']+)["']/)?.[1] || '';
-            brMatch.split(',').forEach(u => {
-              let finalUrl = u.trim();
-              if (finalUrl) {
-                if (finalUrl.includes('cnvs') && !finalUrl.startsWith('http')) {
-                  finalUrl = `${this.baseUrl}/cnvs/` + encodeURIComponent(finalUrl);
-                }
-                embedUrls.push(finalUrl);
-              }
-            });
-          }
-        }
-      } else {
-        const viewUrl = `${this.baseUrl}/desktop/1.2.2/?page=viewItem&id=${itemId}`;
-        const html = await this.fetcher.text(ctx, new URL(viewUrl), {
-          headers: { 'Referer': `${this.baseUrl}/`, 'User-Agent': 'Mozilla/5.0' }
-        }).catch(() => '');
-        
-        const optionsMatch = html.match(/openOptions\s*\(\s*\{([\s\S]*?)\}\s*\)/);
-        const brGroup = optionsMatch?.[1]?.match(/br:\s*['"]([^'"]*)['"]/)?.[1] || '';
-        brGroup.split(',').forEach(u => {
-          let finalUrl = u.trim();
-          if (finalUrl) {
-            if (finalUrl.includes('cnvs') && !finalUrl.startsWith('http')) {
-              finalUrl = `${this.baseUrl}/cnvs/` + encodeURIComponent(finalUrl);
-            }
-            embedUrls.push(finalUrl);
-          }
-        });
-      }
+    const playlistUrl = new URL(finalStreamUrl);
+    const countryCodes = meta.countryCodes ?? [CountryCode.multi];
 
-      return embedUrls;
-    } catch {
+    if (!hasMultiEnabled(ctx.config) && !countryCodes.some(countryCode => countryCode in ctx.config)) {
       return [];
     }
+
+    return [
+      {
+        url: playlistUrl,
+        format: Format.hls,
+        ttl: this.ttl,
+        meta: {
+          ...meta,
+          countryCodes,
+          height: meta.height ?? await guessHeightFromPlaylist(ctx, this.fetcher, playlistUrl, { headers }),
+        },
+      },
+    ];
   }
 
-  private async getMetaDetails(ctx: Context, meta: Meta): Promise<string | null> {
-    const imdbId = meta.imdbId;
-    if (!imdbId) return null;
-    const type = meta.isSeries ? 'series' : 'movie';
+  private tryDecodePlayerLink(url: string): string | null {
+    if (!url.includes('megafrixapi.com/desktop/player') || !url.includes('link=')) return null;
+    const rawLink = url.substringAfter('link=').substringBefore('&');
+    if (!rawLink) return null;
     try {
-      const url = `https://v3-cinemeta.strem.io/meta/${type}/${imdbId}.json`;
-      const response = await this.fetcher.json(ctx, new URL(url)) as { meta?: { name?: string } };
-      return response?.meta?.name || null;
+      const decoded = Buffer.from(rawLink, 'base64').toString('utf-8').trim();
+      return decoded.startsWith('http') ? decoded : null;
     } catch {
       return null;
     }
   }
 
-  private async searchMegaFlixItem(ctx: Context, title: string, year: string, isSeries?: boolean): Promise<string | null> {
-    const encoded = encodeURIComponent(title.trim());
-    const urls = [
-      `${this.baseUrl}/desktop/1.2.2/?page=searchItem&title=${encoded}`,
-      `${this.baseUrl}/desktop/1.2.1/?page=searchItem&title=${encoded}`
-    ];
+  private async resolveMegaFlixWrapper(ctx: Context, url: string, headers: Record<string, string>): Promise<string> {
+    let currentUrl = url;
 
-    for (const url of urls) {
+    if (currentUrl.includes('/cnvs/')) {
+      const encodedPart = currentUrl.substringAfter('/cnvs/');
+      currentUrl = decodeURIComponent(encodedPart);
+      if (this.isStrictMediaUrl(currentUrl)) return currentUrl;
+    }
+
+    if (currentUrl.includes('/hide/') || currentUrl.includes('megafrixapi.com/hide/')) {
+      const hideId = currentUrl.split('/').pop() || '';
+      const hideUrl = `https://hidehide.shop/v/${hideId}`;
       try {
-        const html = await this.fetcher.text(ctx, new URL(url), {
-          headers: { 'Referer': `${this.baseUrl}/`, 'User-Agent': 'Mozilla/5.0' }
-        });
-        if (!html) continue;
-
-        // Extrai ID do item do HTML usando regex rápida
-        const itemRegex = /openItem\s*\(\s*(\d+)\s*\)[^>]*?>\s*<h3[^>]*>([^<]+)<\/h3>/g;
-        let match;
-        while ((match = itemRegex.exec(html)) !== null) {
-          const id = match[1];
-          const itemTitle = match[2].trim();
-          if (this.normalizeTitle(itemTitle) === this.normalizeTitle(title)) {
-            return id;
-          }
+        const html = await this.fetcher.text(ctx, new URL(hideUrl), { headers: { ...headers, 'Referer': 'https://hidehide.shop/' } });
+        const $ = cheerio.load(html);
+        const iframeSrc = $('iframe[src]').attr('src');
+        if (iframeSrc) {
+          return iframeSrc.startsWith('//') ? `https:${iframeSrc}` : iframeSrc;
         }
-        
-        // Fallback: se achar pelo menos um card correspondente ao tipo
-        const firstIdMatch = html.match(/openItem\s*\(\s*(\d+)\s*\)/);
-        if (firstIdMatch?.[1]) return firstIdMatch[1];
-      } catch {}
+      } catch {
+        // Ignora
+      }
+      return hideUrl;
+    }
+
+    return currentUrl;
+  }
+
+  private async resolveStreamUrl(ctx: Context, targetUrl: string, headers: Record<string, string>): Promise<string | null> {
+    if (this.isStrictMediaUrl(targetUrl)) return targetUrl;
+
+    if (targetUrl.includes('hidehide') || targetUrl.includes('hide')) {
+      return this.extractHideHide(ctx, targetUrl, headers);
+    } else if (targetUrl.includes('vidara')) {
+      return this.extractVidara(ctx, targetUrl, headers);
+    } else if (
+      targetUrl.includes('upbolt') || targetUrl.includes('luluvdo') ||
+      targetUrl.includes('playerwish') || targetUrl.includes('streamwish') ||
+      targetUrl.includes('filemoon') || targetUrl.includes('filemolson')
+    ) {
+      return this.extractPackedHost(ctx, targetUrl, headers);
+    } else if (targetUrl.includes('voe')) {
+      return this.extractVoe(ctx, targetUrl, headers);
+    } else if (targetUrl.includes('mixdrop')) {
+      return this.extractMixdrop(ctx, targetUrl, headers);
+    }
+
+    return this.extractGenericHost(ctx, targetUrl, headers);
+  }
+
+  private async extractHideHide(ctx: Context, targetUrl: string, headers: Record<string, string>): Promise<string | null> {
+    const hideId = targetUrl.split('/').pop() || '';
+    const realPlayerUrl = targetUrl.includes('hidehide.shop') ? targetUrl : `https://hidehide.shop/v/${hideId}`;
+    const html = await this.fetcher.text(ctx, new URL(realPlayerUrl), { headers: { ...headers, 'Referer': 'https://hidehide.shop/' } }).catch(() => '');
+    if (!html) return null;
+
+    const $ = cheerio.load(html);
+    const iframeSrc = $('iframe[src]').attr('src');
+    if (iframeSrc) {
+      const innerUrl = iframeSrc.startsWith('//') ? `https:${iframeSrc}` : iframeSrc;
+      return this.resolveStreamUrl(ctx, innerUrl, headers);
+    }
+
+    return this.extractPackedScript(ctx, html, 'https://hidehide.shop/', headers);
+  }
+
+  private async extractVidara(ctx: Context, url: string, headers: Record<string, string>): Promise<string | null> {
+    const html = await this.fetcher.text(ctx, new URL(url), { headers }).catch(() => '');
+    if (!html) return null;
+
+    const directMatch = html.match(/(?:file|source|src)\s*:\s*["'](https?:\/\/[^"']+\.(?:m3u8|txt)[^"']*)["']/i);
+    if (directMatch?.[1]) return directMatch[1];
+
+    const base64Matches = html.matchAll(/atob\s*\(\s*["']([A-Za-z0-9+/=]+)["']\s*\)/g);
+    for (const match of base64Matches) {
+      const decoded = Buffer.from(match[1], 'base64').toString('utf-8');
+      if (decoded.includes('.m3u8') || decoded.includes('.txt')) {
+        const extracted = decoded.match(/https?:\/\/[^\s"'<>]+\.(?:m3u8|txt)[^\s"'<>]*/)?.[0];
+        if (extracted) return extracted;
+      }
+    }
+
+    return this.extractPackedScript(ctx, html, url, headers);
+  }
+
+  private async extractPackedHost(ctx: Context, url: string, headers: Record<string, string>): Promise<string | null> {
+    const html = await this.fetcher.text(ctx, new URL(url), { headers }).catch(() => '');
+    if (!html) return null;
+
+    const $ = cheerio.load(html);
+    const iframeSrc = $('iframe[src]').attr('src');
+    if (iframeSrc) {
+      const innerUrl = iframeSrc.startsWith('//') ? `https:${iframeSrc}` : iframeSrc;
+      return this.resolveStreamUrl(ctx, innerUrl, headers);
+    }
+
+    return this.extractPackedScript(ctx, html, url, headers);
+  }
+
+  private async extractPackedScript(ctx: Context, html: string, referer: string, headers: Record<string, string>): Promise<string | null> {
+    const cleanHtml = html.replace(/\\\//g, '/');
+    const evalMatch = cleanHtml.match(/<script[^>]*>\s*(eval\(function\(p,a,c,k,e,d\).*?)\s*<\/script>/s);
+
+    if (evalMatch?.[1]) {
+      const moonResult = await this.extractViaMoonPhp(ctx, evalMatch[1], referer, headers);
+      if (moonResult) return moonResult;
+    }
+
+    const structuredMatch = cleanHtml.match(/(?:file|source|src|hls|video_url)\s*:\s*["'](https?:\/\/[^"']+\.(?:m3u8|mp4|txt)[^"']*)["']/i);
+    if (structuredMatch?.[1]) return structuredMatch[1];
+
+    const rawMatch = cleanHtml.match(/https?:\/\/[^\s"'<>]+\.(?:m3u8|mp4|txt)[^\s"'<>]*/i)?.[0];
+    return rawMatch && this.isStrictMediaUrl(rawMatch) ? rawMatch : null;
+  }
+
+  private async extractViaMoonPhp(ctx: Context, packedJs: string, referer: string, headers: Record<string, string>): Promise<string | null> {
+    try {
+      const b64Data = Buffer.from(packedJs, 'utf-8').toString('base64');
+      const origin = new URL(referer).origin;
+      const res = await this.fetcher.text(ctx, new URL('https://app.megafrixapi.com/moon.php'), {
+        headers: {
+          ...headers,
+          'Referer': referer,
+          'Origin': origin,
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: `data=${encodeURIComponent(b64Data)}`,
+      });
+
+      const fileMatch = typeof res === 'string' ? res.match(/file\s*:\s*["'](https?:\/\/[^"']+\.(?:m3u8|txt|mp4)[^"']*)["']/i) : null;
+      return fileMatch?.[1] || null;
+    } catch {
+      return null;
+    }
+  }
+
+  private async extractVoe(ctx: Context, url: string, headers: Record<string, string>): Promise<string | null> {
+    const html = await this.fetcher.text(ctx, new URL(url), { headers }).catch(() => '');
+    const hlsMatch = html.match(/'hls'\s*:\s*['"](https?:\/?[^'"]+)['"]/);
+    if (hlsMatch?.[1]) return hlsMatch[1];
+    return this.extractPackedScript(ctx, html, url, headers);
+  }
+
+  private async extractMixdrop(ctx: Context, url: string, headers: Record<string, string>): Promise<string | null> {
+    const html = await this.fetcher.text(ctx, new URL(url), { headers }).catch(() => '');
+    const mixdropMatch = html.match(/MDCore\.wurl\s*=\s*["']([^"']+)["']/);
+    if (mixdropMatch?.[1]) {
+      const it = mixdropMatch[1];
+      return it.startsWith('//') ? `https:${it}` : it;
     }
     return null;
   }
 
-  private normalizeTitle(value: string): string {
-    if (!value) return '';
-    return value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '');
+  private async extractGenericHost(ctx: Context, url: string, headers: Record<string, string>): Promise<string | null> {
+    const html = await this.fetcher.text(ctx, new URL(url), { headers }).catch(() => '');
+    if (!html) return null;
+    return this.extractPackedScript(ctx, html, url, headers);
+  }
+
+  private isStrictMediaUrl(url: string): boolean {
+    if (!url) return false;
+    const clean = url.replace(/\\\//g, '/').trim().toLowerCase();
+    if (
+      clean.includes('google-analytics') || clean.includes('googletagmanager') ||
+      clean.includes('facebook') || clean.includes('adsystem') ||
+      clean.includes('doubleclick') || clean.includes('cdn-cgi') ||
+      clean.includes('.ts') || clean.includes('.m4s') || clean.includes('.css') ||
+      (clean.includes('.js') && !clean.includes('m3u8'))
+    ) {
+      return false;
+    }
+    return (
+      clean.includes('.m3u8') || clean.includes('.mp4') || clean.includes('.mpd') ||
+      clean.includes('master.txt') || clean.includes('.urlset') ||
+      clean.includes('master.m3u8') || clean.includes('index.m3u8') ||
+      clean.includes('playlist.m3u8') || clean.includes('/hls/') ||
+      clean.includes('/hls2/') || clean.includes('/hls3/')
+    );
   }
 }
+
+declare global {
+  interface String {
+    substringAfter(delimiter: string): string;
+    substringBefore(delimiter: string): string;
+  }
+}
+
+String.prototype.substringAfter = function(delimiter: string): string {
+  const index = this.indexOf(delimiter);
+  return index === -1 ? '' : this.substring(index + delimiter.length);
+};
+
+String.prototype.substringBefore = function(delimiter: string): string {
+  const index = this.indexOf(delimiter);
+  return index === -1 ? this.toString() : this.substring(0, index);
+};
