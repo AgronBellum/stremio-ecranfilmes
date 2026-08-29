@@ -36,7 +36,7 @@ export const createSources = (fetcher: Fetcher): Source[] => {
     new VixSrc(fetcher),
     new VidSrc(),
     new RgShows(fetcher),
-    new ClickHostSource(fetcher)'
+    new ClickHostSource(fetcher),
     // AL
     new Kokoshka(fetcher),
     // ES / MX
