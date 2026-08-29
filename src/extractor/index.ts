@@ -12,6 +12,7 @@ import { HubDrive } from './HubDrive';
 import { KinoGer } from './KinoGer';
 import { LuluStream } from './LuluStream';
 import { MegaFlix } from './MegaFlix';
+import { ClickHost } from './ClickHost';
 import { Mixdrop } from './Mixdrop';
 import { RgShows } from './RgShows';
 import { SaveFiles } from './SaveFiles';
@@ -34,7 +35,9 @@ export const createExtractors = (fetcher: Fetcher): Extractor[] => {
   const hubCloud = new HubCloud(fetcher);
 
   return [
-    new MegaFlix(fetcher), 
+
+    new ClickHost(fetcher),
+    new MegaFlix(fetcher),
     new DoodStream(fetcher),
     new Dropload(fetcher),
     new Fastream(fetcher),
