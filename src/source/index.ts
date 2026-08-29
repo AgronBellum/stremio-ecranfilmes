@@ -3,6 +3,9 @@ import { CineHDPlus } from './CineHDPlus';
 import { Cuevana } from './Cuevana';
 import { Einschalten } from './Einschalten';
 import { Eurostreaming } from './Eurostreaming';
+
+import { ClickHostSource } from './ClickHostSource';
+
 import { FourKHDHub } from './FourKHDHub';
 import { Frembed } from './Frembed';
 import { FrenchCloud } from './FrenchCloud';
@@ -33,6 +36,7 @@ export const createSources = (fetcher: Fetcher): Source[] => {
     new VixSrc(fetcher),
     new VidSrc(),
     new RgShows(fetcher),
+    new ClickHostSource(fetcher)'
     // AL
     new Kokoshka(fetcher),
     // ES / MX
