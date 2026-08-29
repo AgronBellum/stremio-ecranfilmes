@@ -1,7 +1,6 @@
 import { NotFoundError } from '../error';
 import { Context, Format, InternalUrlResult, Meta } from '../types';
 import { Extractor } from './Extractor';
-import * as cheerio from 'cheerio';
 import { URL } from 'url';
 
 export class ClickHost extends Extractor {
