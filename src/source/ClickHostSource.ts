@@ -7,7 +7,7 @@ export class ClickHostSource extends Source {
   public readonly id = 'clickhost';
   public readonly label = 'ClickHost';
   public readonly contentTypes: ContentType[] = ['movie', 'series'];
-  public readonly countryCodes: CountryCode[] = [CountryCode.multi, CountryCode.br];
+  public readonly countryCodes: CountryCode[] = [CountryCode.multi];
   public readonly baseUrl = 'https://embed-api.clickhost.xyz';
   public override readonly priority = 1;
 
