@@ -6,16 +6,15 @@ import { URL } from 'url';
 export class ClickHost extends Extractor {
   public readonly id = 'clickhost';
   public readonly label = 'ClickHost';
-  public override readonly ttl: number = 21600000; // 6h
+  public override readonly ttl: number = 21600000; // 6 horas
 
   private readonly mainUrl = 'https://embed-api.clickhost.xyz';
-
   private readonly userAgent =
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
   public supports(_ctx: Context, url: URL): boolean {
-    const allowed = ['clickhost.xyz', 'embed-api.clickhost.xyz'];
-    return allowed.some(domain => url.host.includes(domain));
+    const allowedDomains = ['clickhost.xyz', 'embed-api.clickhost.xyz'];
+    return allowedDomains.some(domain => url.host.includes(domain));
   }
 
   protected async extractInternal(ctx: Context, url: URL, meta: Meta): Promise<InternalUrlResult[]> {
@@ -24,13 +23,12 @@ export class ClickHost extends Extractor {
       'User-Agent': this.userAgent,
       'Referer': targetUrl,
       'Origin': this.mainUrl,
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
       'Accept-Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
     };
 
     let serverId = url.searchParams.get('server_id');
 
-    // Se o ID do servidor não veio na URL, buscamos na página HTML
     if (!serverId) {
       const html = await this.fetcher.text(ctx, new URL(targetUrl), { headers }).catch(() => '');
       if (html) {
@@ -43,7 +41,6 @@ export class ClickHost extends Extractor {
       throw new NotFoundError();
     }
 
-    // Chamada ao endpoint /init da API do ClickHost
     const initUrl = `${this.mainUrl}/embed/stream/${serverId}/init`;
     const initHeaders = {
       'User-Agent': this.userAgent,
@@ -68,7 +65,7 @@ export class ClickHost extends Extractor {
 
     let json: any;
     try {
-      json = JSON.parse(initResponseText);
+      json = typeof initResponseText === 'string' ? JSON.parse(initResponseText) : initResponseText;
     } catch {
       throw new NotFoundError();
     }
@@ -89,7 +86,7 @@ export class ClickHost extends Extractor {
     return [
       {
         url: new URL(streamUrl),
-        format: format,
+        format,
         meta: {
           ...meta,
         },
